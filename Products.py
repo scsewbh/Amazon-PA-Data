@@ -16,13 +16,22 @@ mycursor = mydb.cursor()
 #mycursor.execute("SHOW TABLES")
 #mycursor.execute("DROP TABLE products")
 
-#for x in mycursor:
-#  print(x)
+mycursor.execute("SELECT * FROM products")
 
-#mydb.commit()
+myresult = mycursor.fetchall()
 
-amzn_base_url = 'https://www.amazon.com'
-amzn_bestElec_url = 'https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics/'
+for x in myresult:
+  print(x)
+
+amzn_base_url = 'https://www.amazon.com/'
+amzn_bestElec_url = 'https://www.amazon.com/Best-Sellers/zgbs/electronics/'
+amzn_bestVideoGame_url = 'https://www.amazon.com/Best-Sellers/zgbs/videogames/'
+amzn_bestCellAccessories_url = 'https://www.amazon.com/Best-Sellers/zgbs/wireless/'
+amzn_bestPC_url = 'https://www.amazon.com/Best-Sellers/zgbs/pc/'
+amzn_bestHPC_url = 'https://www.amazon.com/Best-Sellers/zgbs/hpc/'
+amzn_bestSkincare_url = 'https://www.amazon.com/Best-Sellers/zgbs/beauty/11060451/'
+amzn_bestHI_url = 'https://www.amazon.com/Best-Sellers/zgbs/hi/'
+amzn_bestOffice_url = 'https://www.amazon.com/Best-Sellers/zgbs/office-products'
 
 
 class AMZN:
@@ -43,5 +52,3 @@ class AMZN:
 
         print(mycursor.rowcount, "was inserted.")
 
-x = AMZN()
-x.results()
