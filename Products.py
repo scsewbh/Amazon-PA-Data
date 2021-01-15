@@ -11,7 +11,7 @@ mydb = mysql.connector.connect(
 '''
 mycursor = mydb.cursor()
 #mycursor.execute("CREATE DATABASE mydatabase")
-#mycursor.execute("CREATE TABLE products (id INT AUTO_INCREMENT PRIMARY KEY, PartialLink TEXT, Link TEXT)")
+#mycursor.execute("CREATE TABLE products (ProductName VARCHAR(200) PRIMARY KEY, Link TEXT)")
 
 #mycursor.execute("SHOW TABLES")
 #mycursor.execute("DROP TABLE products")
@@ -24,16 +24,16 @@ for x in myresult:
   print(x)
 '''
 amzn_base_url = 'https://www.amazon.com/'
-amzn_bestElec_url = 'https://www.amazon.com/most-wished-for/zgbs/electronics/'
-amzn_bestVideoGame_url = 'https://www.amazon.com/most-wished-for/zgbs/videogames/'
-amzn_bestCellAccessories_url = 'https://www.amazon.com/most-wished-for/zgbs/wireless/'
-amzn_bestPC_url = 'https://www.amazon.com/most-wished-for/zgbs/pc/'
-amzn_bestHPC_url = 'https://www.amazon.com/most-wished-for/zgbs/hpc/'
-amzn_bestSkincare_url = 'https://www.amazon.com/most-wished-for/zgbs/beauty/11060451/'
-amzn_bestHI_url = 'https://www.amazon.com/most-wished-for/zgbs/hi/'
-amzn_bestOffice_url = 'https://www.amazon.com/most-wished-for/zgbs/office-products'
+amzn_Elec_url = 'https://www.amazon.com/most-wished-for/zgbs/electronics/'
+amzn_VideoGame_url = 'https://www.amazon.com/most-wished-for/zgbs/videogames/'
+amzn_CellAccessories_url = 'https://www.amazon.com/most-wished-for/zgbs/wireless/'
+amzn_PC_url = 'https://www.amazon.com/most-wished-for/zgbs/pc/'
+amzn_HPC_url = 'https://www.amazon.com/most-wished-for/zgbs/hpc/'
+amzn_Skincare_url = 'https://www.amazon.com/most-wished-for/zgbs/beauty/11060451/'
+amzn_HI_url = 'https://www.amazon.com/most-wished-for/zgbs/hi/'
+amzn_Office_url = 'https://www.amazon.com/most-wished-for/zgbs/office-products'
 
-amzn_bestSellers = [amzn_bestElec_url, amzn_bestVideoGame_url, amzn_bestCellAccessories_url, amzn_bestPC_url, amzn_bestHPC_url, amzn_bestSkincare_url, amzn_bestHI_url, amzn_bestOffice_url]
+amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, amzn_PC_url, amzn_HPC_url, amzn_Skincare_url, amzn_HI_url, amzn_Office_url]
 
 class AMZN:
     def __init__(self):
@@ -61,7 +61,8 @@ for x in amzn_bestSellers:
     mycursor.executemany(sql, data)
     mydb.commit()
     print(mycursor.rowcount, "was inserted.")
-'''
 g = 'https://www.amazon.com//Canon-PG-243-Cartridge-Compatible-iP2820/dp/B01LXJNPZV?_encoding=UTF8&psc=1'
 bestSellers = AMZN()
+'''
+
 
