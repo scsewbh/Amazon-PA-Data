@@ -1,6 +1,15 @@
-import requests
 from bs4 import BeautifulSoup as bs
 import mysql.connector
+from selenium import webdriver
+
+
+#-----------------------Settings--------------------------
+
+chromedriver = 'C:\\Users\\scsew\\Desktop\\chromedriver.exe'
+
+options = webdriver.ChromeOptions()
+#options.add_argument('headless')
+options.add_argument('window-size=1200x600')  # optional
 
 mydb = mysql.connector.connect(
   host="localhost",
@@ -23,6 +32,9 @@ myresult = mycursor.fetchall()
 for x in myresult:
   print(x)
 '''
+
+#------------------------Initial Variables--------------------------------
+
 amzn_base_url = 'https://www.amazon.com/'
 amzn_Elec_url = 'https://www.amazon.com/most-wished-for/zgbs/electronics/'
 amzn_VideoGame_url = 'https://www.amazon.com/most-wished-for/zgbs/videogames/'
@@ -35,22 +47,36 @@ amzn_Office_url = 'https://www.amazon.com/most-wished-for/zgbs/office-products'
 
 amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, amzn_PC_url, amzn_HPC_url, amzn_Skincare_url, amzn_HI_url, amzn_Office_url]
 
+#-----------------------AMZN Class ----------------------------
+
 class AMZN:
     def __init__(self):
-        self.session = requests.Session()
+        self.browser = webdriver.Chrome(executable_path=chromedriver, options=options)
+        self.data = []
 
-    def results(self, url):
-        data = []
-        test = self.session.get(url)
-        soup = bs(test.text, 'html.parser')
+    def passToDatabase(self):
+        mycursor = mydb.cursor()
+        sql = "INSERT IGNORE INTO products (ProductName, Link) VALUES (%s, %s)" #Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
+        mycursor.executemany(sql, self.data)
+        mydb.commit()
+        print(mycursor.rowcount, "was inserted to table.")
+
+    def results(self, listUrl):
+        self.data = []
+        self.browser.get(listUrl)
+        listData = self.browser.page_source
+        soup = bs(listData, 'html.parser')
+        self.browser.quit()
+        print(soup)
         a = soup.find_all('a', class_='a-link-normal a-text-normal')
 
         print(a)
-        for x in a:
-            p = soup
-            data.append((x['href'], amzn_base_url + x['href']))
-        return data
-
+        for parLink in a:
+            pHref = parLink['href'].split('?_encoding=')[0]
+            if '/ref=' in pHref:
+                pHref = pHref.split('/ref=')[0]
+            self.data.append((pHref, amzn_base_url + pHref))
+        self.passToDatabase()
 
 '''
 <span class="p13n-sc-price">$29.99</span>
@@ -64,5 +90,6 @@ for x in amzn_bestSellers:
 g = 'https://www.amazon.com//Canon-PG-243-Cartridge-Compatible-iP2820/dp/B01LXJNPZV?_encoding=UTF8&psc=1'
 bestSellers = AMZN()
 '''
-
+y = AMZN()
+y.results('https://www.amazon.com/most-wished-for/zgbs/office-products')
 
