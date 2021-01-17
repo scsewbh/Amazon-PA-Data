@@ -10,7 +10,7 @@ options.add_argument('window-size=1200x600')  # optional
 browser = webdriver.Chrome(executable_path=chromedriver, options=options)
 
 #browser.get('https://www.amazon.com/All-New-Echo-Dot-4th-Gen/dp/B07XJ8C8F5/ref=zg_bs_electronics_home_1?_encoding=UTF8&psc=1&')
-browser.get('https://www.amazon.com/All-New-Echo-Dot-4th-Gen/dp/B08GTWC9ZB/ref=zg_bs_electronics_home_1?_encoding=UTF8&th=1')
+browser.get('https://www.amazon.com/TeeTurtle-Reversible-Octopus-Mini-Plush/dp/B07H4YQF3Q/')
 
 elem = browser.find_element_by_css_selector('#ppd')
 
@@ -23,6 +23,7 @@ main = elem.find_element_by_id('centerCol').text
 splitted = main.splitlines()
 product_name = splitted[0]
 print(product_name)
+#ANALYZE IF PRODUCT Had More than one price
 for line in splitted:
     if 'Price: $' in line:
         print(line)

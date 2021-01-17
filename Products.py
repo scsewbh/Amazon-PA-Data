@@ -78,6 +78,12 @@ class AMZN:
             self.data.append((pHref, amzn_base_url + pHref))
         self.passToDatabase()
 
+    def page_with_list(self, page_urls):
+        for url in page_urls:
+            self.results(url)
+
+
+
 '''
 <span class="p13n-sc-price">$29.99</span>
 bestSellers = AMZN()
@@ -90,6 +96,7 @@ for x in amzn_bestSellers:
 g = 'https://www.amazon.com//Canon-PG-243-Cartridge-Compatible-iP2820/dp/B01LXJNPZV?_encoding=UTF8&psc=1'
 bestSellers = AMZN()
 '''
+
 y = AMZN()
 y.results('https://www.amazon.com/most-wished-for/zgbs/office-products')
 
