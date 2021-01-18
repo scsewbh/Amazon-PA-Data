@@ -83,7 +83,6 @@ class AMZN:
     def page_parser(self, url):
         self.browser.get(url)
         elem = self.browser.find_element_by_css_selector('#ppd')
-
         image = elem.find_element_by_id('leftCol')
         content = image.find_element_by_class_name('imgTagWrapper')
         con = content.find_element_by_tag_name('img')
@@ -104,7 +103,7 @@ class AMZN:
             if 'You Save: $' in line:
                 product_list['savings'] = line
         product_list['img_url'] = img_src
-
+        product_list['product_id'] = url.replace(amzn_base_url, '')
 
     def passToParser(self):
         url = 'l'
