@@ -18,19 +18,23 @@ image = elem.find_element_by_id('leftCol')
 content = image.find_element_by_class_name('imgTagWrapper')
 con = content.find_element_by_tag_name('img')
 img_src = con.get_attribute('src')
-
+product_list = {}
 main = elem.find_element_by_id('centerCol').text
 splitted = main.splitlines()
 product_name = splitted[0]
-print(product_name)
+product_list['name'] = product_name
 #ANALYZE IF PRODUCT Had More than one price
+temp = 0
 for line in splitted:
     if 'Price: $' in line:
-        print(line)
+        temp += 1
+        if temp == 1:
+            product_list['price'] = line
+        if temp == 2:
+            product_list['discounted_price'] = line
     if 'You Save: $' in line:
-        print(line)
-
+        product_list['savings'] = line
+product_list['img_url'] = img_src
 browser.quit()
 
 
-print(img_src)

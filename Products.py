@@ -67,10 +67,8 @@ class AMZN:
         listData = self.browser.page_source
         soup = bs(listData, 'html.parser')
         self.browser.quit()
-        print(soup)
         a = soup.find_all('a', class_='a-link-normal a-text-normal')
 
-        print(a)
         for parLink in a:
             pHref = parLink['href'].split('?_encoding=')[0]
             if '/ref=' in pHref:
@@ -82,7 +80,36 @@ class AMZN:
         for url in page_urls:
             self.results(url)
 
+    def page_parser(self, url):
+        self.browser.get(url)
+        elem = self.browser.find_element_by_css_selector('#ppd')
 
+        image = elem.find_element_by_id('leftCol')
+        content = image.find_element_by_class_name('imgTagWrapper')
+        con = content.find_element_by_tag_name('img')
+        img_src = con.get_attribute('src')
+        product_list = {}
+        main = elem.find_element_by_id('centerCol').text
+        splitted = main.splitlines()
+        product_name = splitted[0]
+        product_list['name'] = product_name
+        temp = 0
+        for line in splitted:
+            if 'Price: $' in line:
+                temp += 1
+                if temp == 1:
+                    product_list['price'] = line
+                if temp == 2:
+                    product_list['discounted_price'] = line
+            if 'You Save: $' in line:
+                product_list['savings'] = line
+        product_list['img_url'] = img_src
+
+
+    def passToParser(self):
+        url = 'l'
+        self.page_parser(url)
+        self.browser.quit()
 
 '''
 <span class="p13n-sc-price">$29.99</span>
