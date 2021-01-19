@@ -17,13 +17,12 @@ mydb = mysql.connector.connect(
   password="root",
   database="mydatabase"
 )
-'''
-mycursor = mydb.cursor()
-#mycursor.execute("CREATE DATABASE mydatabase")
-#mycursor.execute("CREATE TABLE products (ProductName VARCHAR(200) PRIMARY KEY, Link TEXT)")
-
-#mycursor.execute("SHOW TABLES")
-#mycursor.execute("DROP TABLE products")
+'''mycursor = mydb.cursor() #mycursor.execute("CREATE DATABASE mydatabase") 
+mycursor.execute("CREATE TABLE products (ProductName VARCHAR(200) PRIMARY KEY, Link TEXT)") 
+mycursor.execute("CREATE TABLE item_data (Name TEXT, Price DECIMAL(5,2), Img_URL TEXT, ProductName VARCHAR(255), PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))") 
+mycursor.execute("CREATE TABLE sync_data (ProductName VARCHAR(255), Price DECIMAL(5,2), Savings TINYINT, PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))") 
+mycursor.execute("SHOW TABLES") 
+mycursor.execute("DROP TABLE products") 
 
 mycursor.execute("SELECT * FROM products")
 
@@ -53,6 +52,7 @@ class AMZN:
     def __init__(self):
         self.browser = webdriver.Chrome(executable_path=chromedriver, options=options)
         self.data = []
+        self.page_data = {}
 
     def passToDatabase(self):
         mycursor = mydb.cursor()
@@ -77,38 +77,68 @@ class AMZN:
         self.passToDatabase()
 
     def page_with_list(self, page_urls):
+        #Takes the array of pages that are list eg: bestsellers, new releases
         for url in page_urls:
             self.results(url)
 
+    def passToParser(self):
+        mycursor = mydb.cursor()
+        mycursor.execute("SELECT Link FROM products LIMIT 0, 3") #LIMIT AT 3 FOR TESTING - PARTITION OUT FOR HEROKU SOMEHOW
+        myresult = mycursor.fetchall()
+        print(myresult)
+        for url in myresult:
+            print(url[0])
+            self.page_parser(url[0])
+        self.browser.quit()
+
     def page_parser(self, url):
         self.browser.get(url)
+        self.page_data = {}
         elem = self.browser.find_element_by_css_selector('#ppd')
+
         image = elem.find_element_by_id('leftCol')
         content = image.find_element_by_class_name('imgTagWrapper')
         con = content.find_element_by_tag_name('img')
         img_src = con.get_attribute('src')
-        product_list = {}
         main = elem.find_element_by_id('centerCol').text
+
         splitted = main.splitlines()
         product_name = splitted[0]
-        product_list['name'] = product_name
+        self.page_data['name'] = product_name
         temp = 0
         for line in splitted:
             if 'Price: $' in line:
                 temp += 1
                 if temp == 1:
-                    product_list['price'] = line
+                    self.page_data['price'] = line
                 if temp == 2:
-                    product_list['discounted_price'] = line
+                    self.page_data['discounted_price'] = line
             if 'You Save: $' in line:
-                product_list['savings'] = line
-        product_list['img_url'] = img_src
-        product_list['product_id'] = url.replace(amzn_base_url, '')
+                self.page_data['savings'] = line
+        self.page_data['img_url'] = img_src
+        self.page_data['product_id'] = url.replace(amzn_base_url, '')
+        self.passProductsToDB()
+        for elem in self.page_data:
+            print(elem, self.page_data[elem])
 
-    def passToParser(self):
-        url = 'l'
-        self.page_parser(url)
-        self.browser.quit()
+    def passProductsToDB(self):
+        dataHolder = []
+        types = ['name', 'price', 'discounted_price', 'savings', 'img_url', 'product_id']
+        numerical = ['price', 'discounted_price', 'savings']
+        for value in types:
+            if value in self.page_data:
+                dataHolder.append(self.page_data[value])
+            elif value in numerical:
+                dataHolder.append(self.page_data[-1])
+            else:
+                dataHolder.append(self.page_data['N/A'])
+        mycursor = mydb.cursor()
+        sql = "INSERT IGNORE INTO item_data (Name, Price, Discounted_Price, Savings, Img_URL, ProductName) VALUES (%s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
+        mycursor.executemany(sql, dataHolder)
+        mydb.commit()
+        print(mycursor.rowcount, "was inserted to table.")
+
+
 
 '''
 <span class="p13n-sc-price">$29.99</span>
@@ -124,5 +154,5 @@ bestSellers = AMZN()
 '''
 
 y = AMZN()
-y.results('https://www.amazon.com/most-wished-for/zgbs/office-products')
+y.passToParser()
 
