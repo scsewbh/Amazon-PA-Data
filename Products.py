@@ -21,7 +21,7 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor() #mycursor.execute("CREATE DATABASE mydatabase") 
 mycursor.execute("CREATE TABLE products (ProductName VARCHAR(200) PRIMARY KEY, Link TEXT)") 
 #mycursor.execute("CREATE TABLE item_data (Name TEXT, Price DECIMAL(5,2), Img_URL TEXT, ProductName VARCHAR(255), PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))") 
-#mycursor.execute("CREATE TABLE sync_data (ProductName VARCHAR(255), Price DECIMAL(5,2), Savings TINYINT, PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))") 
+#mycursor.execute("CREATE TABLE sync_data (ProductName VARCHAR(255), Price DECIMAL(5,2), PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))") 
 mycursor.execute("SHOW TABLES") 
 mycursor.execute("DROP TABLE products") 
 
@@ -54,10 +54,10 @@ class AMZN:
         self.browser = webdriver.Chrome(executable_path=chromedriver, options=options)
         self.data = []
         self.page_data = {}
-        self.item_dataHolder = []
-        self.sync_dataHolder = []
+        self.item_dataHolder = ()
+        self.sync_dataHolder = ()
         self.item_data_names = ['name', 'price', 'img_url', 'product_id']
-        self.sync_data_names = ['product_id', 'discounted_price', 'savings']
+        self.sync_data_names = ['product_id', 'discounted_price']
 
     def passToDatabase(self):
         mycursor = mydb.cursor()
@@ -115,11 +115,9 @@ class AMZN:
             if 'Price: $' in line:
                 temp += 1
                 if temp == 1:
-                    self.page_data['price'] = float((line.split('$')[-1]).split(' ')[0])
+                    self.page_data['price'] = (line.split('$')[-1]).split(' ')[0]
                 if temp == 2:
-                    self.page_data['discounted_price'] = float((line.split('$')[-1]).split(' ')[0])
-            if 'You Save: $' in line:
-                self.page_data['savings'] = int((line.split('(')[-1]).split('%')[0])
+                    self.page_data['discounted_price'] = (line.split('$')[-1]).split(' ')[0]
         self.page_data['img_url'] = img_src
         self.page_data['product_id'] = url.replace(amzn_base_url, '')
         self.dataOrganizer()
@@ -128,40 +126,41 @@ class AMZN:
         for elem in self.page_data:
             print(elem, self.page_data[elem])
         '''
-
+    #INITIAL PASS SETUP
     def dataOrganizer(self):
-        self.item_dataHolder = []
-        self.sync_dataHolder = []
+        self.item_dataHolder = ()
+        self.sync_dataHolder = ()
         for value in self.item_data_names:
             if value in self.page_data:
-                self.item_dataHolder.append(self.page_data[value])
+                self.item_dataHolder += (self.page_data[value],)
             else:
-                self.item_dataHolder.append(None)
+                self.item_dataHolder += (None,)
 
         for value in self.sync_data_names:
             if value in self.page_data:
-                self.sync_dataHolder.append(self.page_data[value])
+                self.sync_dataHolder += (self.page_data[value],)
+            elif value == 'discounted_price':
+                self.sync_dataHolder += (self.page_data['price'],)
             else:
-                self.sync_dataHolder.append(None)
+                self.sync_dataHolder += (None,)
 
     def passProductsToDBs(self):
         # item_data (Name TEXT, Price DECIMAL(5,2), Img_URL TEXT, ProductName VARCHAR(255), PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))")
         # sync_data (ProductName VARCHAR(255), Price DECIMAL(5,2), Savings TINYINT, PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))")
 
         mycursor = mydb.cursor()
-        sql = "INSERT IGNORE INTO item_data (Name, Price, Img_URL, ProductName) VALUES (%s, %d, %s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
-        mycursor.executemany(sql, self.item_dataHolder)
+        sql = "INSERT IGNORE INTO item_data (Name, Price, Img_URL, ProductName) VALUES (%s, %s, %s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
+        mycursor.execute(sql, self.item_dataHolder)
         mydb.commit()
-        print(mycursor.rowcount, "was inserted to the static item_data table.")
 
         #---------------------------------------------------------
 
         mycursor = mydb.cursor()
-        sql = "INSERT IGNORE INTO sync_data (ProductName, Price, Savings) VALUES (%s, %d, %d)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
-        mycursor.executemany(sql, self.sync_dataHolder)
+        sql = "INSERT IGNORE INTO sync_data (ProductName, Price) VALUES (%s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
+        mycursor.execute(sql, self.sync_dataHolder)
         mydb.commit()
-        print(mycursor.rowcount, "was inserted to the variable sync_data table.")
 
+    #CONSTANTLY CHANGING VARIABLE - UPDATING
 
 
 '''
