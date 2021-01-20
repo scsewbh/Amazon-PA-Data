@@ -115,30 +115,30 @@ class AMZN:
             if 'Price: $' in line:
                 temp += 1
                 if temp == 1:
-                    self.page_data['price'] = line
+                    self.page_data['price'] = float((line.split('$')[-1]).split(' ')[0])
                 if temp == 2:
-                    self.page_data['discounted_price'] = line
+                    self.page_data['discounted_price'] = float((line.split('$')[-1]).split(' ')[0])
             if 'You Save: $' in line:
-                self.page_data['savings'] = line
+                self.page_data['savings'] = int((line.split('(')[-1]).split('%')[0])
         self.page_data['img_url'] = img_src
         self.page_data['product_id'] = url.replace(amzn_base_url, '')
+        self.dataOrganizer()
         self.passProductsToDBs()
         '''
         for elem in self.page_data:
             print(elem, self.page_data[elem])
         '''
 
-    def dataSanitizer(self):
+    def dataOrganizer(self):
         self.item_dataHolder = []
         self.sync_dataHolder = []
-
-        for value in item_data_names:
+        for value in self.item_data_names:
             if value in self.page_data:
                 self.item_dataHolder.append(self.page_data[value])
             else:
                 self.item_dataHolder.append(None)
 
-        for value in sync_data_names:
+        for value in self.sync_data_names:
             if value in self.page_data:
                 self.sync_dataHolder.append(self.page_data[value])
             else:
@@ -148,7 +148,6 @@ class AMZN:
         # item_data (Name TEXT, Price DECIMAL(5,2), Img_URL TEXT, ProductName VARCHAR(255), PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))")
         # sync_data (ProductName VARCHAR(255), Price DECIMAL(5,2), Savings TINYINT, PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))")
 
-
         mycursor = mydb.cursor()
         sql = "INSERT IGNORE INTO item_data (Name, Price, Img_URL, ProductName) VALUES (%s, %d, %s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
         mycursor.executemany(sql, self.item_dataHolder)
@@ -156,7 +155,6 @@ class AMZN:
         print(mycursor.rowcount, "was inserted to the static item_data table.")
 
         #---------------------------------------------------------
-
 
         mycursor = mydb.cursor()
         sql = "INSERT IGNORE INTO sync_data (ProductName, Price, Savings) VALUES (%s, %d, %d)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
