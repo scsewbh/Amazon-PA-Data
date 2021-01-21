@@ -160,7 +160,7 @@ class AMZN:
         mycursor.execute(sql, self.sync_dataHolder)
         mydb.commit()
 
-    #CONSTANTLY CHANGING VARIABLE - UPDATING
+
 
 
 '''
