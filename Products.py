@@ -91,7 +91,6 @@ class AMZN:
         mycursor = mydb.cursor()
         mycursor.execute("SELECT Link FROM products") #LIMIT AT 3 FOR TESTING - PARTITION OUT FOR HEROKU SOMEHOW
         myresult = mycursor.fetchall()
-        print(myresult)
         for url in myresult:
             print(url[0])
             self.page_parser(url[0])
@@ -103,7 +102,10 @@ class AMZN:
         try:
             elem = self.browser.find_element_by_css_selector('#ppd')
         except selenium.common.exceptions.NoSuchElementException:
-            elem = self.browser.find_element_by_css_selector('#dp-container')
+            try:
+                elem = self.browser.find_element_by_css_selector('#dp-container')
+            except selenium.common.exceptions.NoSuchElementException:
+                return
 
         image = elem.find_element_by_id('leftCol')
         content = image.find_element_by_class_name('imgTagWrapper')
@@ -126,6 +128,8 @@ class AMZN:
                 self.page_data['price'] = (line.split('$')[-1]).split(' ')[0]
             if 'With Deal: $' in line:
                 self.page_data['discounted_price'] = (line.split('$')[-1]).split(' ')[0]
+            if 'price' not in self.page_data:
+                self.page_data['price'] = 'Not Listed'
         self.page_data['img_url'] = img_src
         self.page_data['product_id'] = url.replace(amzn_base_url, '')
         self.dataOrganizer()
