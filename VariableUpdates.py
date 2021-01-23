@@ -19,7 +19,7 @@ mydb = mysql.connector.connect(
 )
 '''
 mycursor = mydb.cursor() #mycursor.execute("CREATE DATABASE mydatabase") 
-mycursor.execute("CREATE TABLE products (ProductName VARCHAR(200) PRIMARY KEY, Link TEXT)") 
+mycursor.execute("CREATE TABLE products (ProductName VARCHAR(255) PRIMARY KEY, Link TEXT)") 
 #mycursor.execute("CREATE TABLE item_data (Name TEXT, Price DECIMAL(5,2), Img_URL TEXT, ProductName VARCHAR(255), PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))") 
 #mycursor.execute("CREATE TABLE sync_data (ProductName VARCHAR(255), Price DECIMAL(5,2), PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))") 
 mycursor.execute("SHOW TABLES") 
@@ -51,13 +51,14 @@ amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, a
 
 class AMZN:
     def __init__(self):
+        self.trigger = 0
         self.browser = webdriver.Chrome(executable_path=chromedriver, options=options)
         self.data = ()
         self.passToParser()
 
     def passToParser(self):
         mycursor = mydb.cursor()
-        mycursor.execute("SELECT Link FROM products LIMIT 0, 3") #LIMIT AT 3 FOR TESTING - PARTITION OUT FOR HEROKU SOMEHOW
+        mycursor.execute("SELECT Link FROM products") #LIMIT AT 3 FOR TESTING - PARTITION OUT FOR HEROKU SOMEHOW ----> #NOT NEEDED FOR NOW
         myresult = mycursor.fetchall()
         print(myresult)
         for url in myresult:
@@ -84,6 +85,7 @@ class AMZN:
                 if temp == 1:
                     self.data += ((line.split('$')[-1]).split(' ')[0],)
                 if temp == 2:
+                    self.data = ()
                     self.data += ((line.split('$')[-1]).split(' ')[0],)
         self.data += (url.replace(amzn_base_url, ''),)
         self.updateDatabase()
@@ -92,7 +94,16 @@ class AMZN:
         #------Passing--------
         mycursor = mydb.cursor()
         sql = "UPDATE sync_data SET Price = %s WHERE ProductName = %s"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
-        mycursor.executemany(sql, self.data)  # data is reversed price first then product name
+        print(self.data)
+        mycursor.execute(sql, self.data)  # data is reversed price first then product name
         mydb.commit()
+        self.trigger += mycursor.rowcount
         print(mycursor.rowcount, "updated in table.")
+        if self.trigger > 0:
+            self.trigger = 0
+            self.SELECTFUNCTION
 
+
+
+
+AMZN()

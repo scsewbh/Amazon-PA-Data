@@ -1,21 +1,22 @@
 from bs4 import BeautifulSoup as bs
 import mysql.connector
 from selenium import webdriver
-
+import os
 
 #-----------------------Settings--------------------------
 
-chromedriver = 'C:\\Users\\scsew\\Desktop\\chromedriver.exe'
-
-options = webdriver.ChromeOptions()
-#options.add_argument('headless')
-options.add_argument('window-size=1200x600')  # optional
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--no-sandbox")
+driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="root",
-  database="mydatabase"
+    host="35.231.149.95",
+    user="root",
+    password="Heroku3031",
+    database="mydatabase"
 )
 '''
 mycursor = mydb.cursor() #mycursor.execute("CREATE DATABASE mydatabase") 
@@ -71,7 +72,6 @@ class AMZN:
         self.browser.get(listUrl)
         listData = self.browser.page_source
         soup = bs(listData, 'html.parser')
-        self.browser.quit()
         a = soup.find_all('a', class_='a-link-normal a-text-normal')
 
         for parLink in a:
@@ -85,10 +85,11 @@ class AMZN:
         #Takes the array of pages that are list eg: bestsellers, new releases
         for url in page_urls:
             self.results(url)
+        self.browser.quit()
 
     def passToParser(self):
         mycursor = mydb.cursor()
-        mycursor.execute("SELECT Link FROM products LIMIT 0, 3") #LIMIT AT 3 FOR TESTING - PARTITION OUT FOR HEROKU SOMEHOW
+        mycursor.execute("SELECT Link FROM products") #LIMIT AT 3 FOR TESTING - PARTITION OUT FOR HEROKU SOMEHOW
         myresult = mycursor.fetchall()
         print(myresult)
         for url in myresult:

@@ -1,0 +1,14 @@
+beautifulsoup4==4.9.3
+bs4==0.0.1
+certifi==2020.12.5
+chardet==4.0.0
+idna==2.10
+mysql-connector-python==8.0.22
+pip==20.3.3
+protobuf==3.14.0
+requests==2.25.1
+selenium==3.141.0
+setuptools==51.1.1
+six==1.15.0
+soupsieve==2.1
+urllib3==1.26.2
