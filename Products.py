@@ -10,7 +10,6 @@ chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
-driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
 mydb = mysql.connector.connect(
     host="35.231.149.95",
@@ -52,7 +51,7 @@ amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, a
 
 class AMZN:
     def __init__(self):
-        self.browser = webdriver.Chrome(executable_path=chromedriver, options=options)
+        self.browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
         self.data = []
         self.page_data = {}
         self.item_dataHolder = ()
