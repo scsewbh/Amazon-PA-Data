@@ -118,6 +118,10 @@ class AMZN:
                     self.page_data['price'] = (line.split('$')[-1]).split(' ')[0]
                 if temp == 2:
                     self.page_data['discounted_price'] = (line.split('$')[-1]).split(' ')[0]
+            if 'Was: $' in line:
+                self.page_data['price'] = (line.split('$')[-1]).split(' ')[0]
+            if 'With Deal: $' in line:
+                self.page_data['discounted_price'] = (line.split('$')[-1]).split(' ')[0]
         self.page_data['img_url'] = img_src
         self.page_data['product_id'] = url.replace(amzn_base_url, '')
         self.dataOrganizer()
