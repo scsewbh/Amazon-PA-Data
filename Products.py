@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup as bs
 import mysql.connector
 from selenium import webdriver
+import selenium.common.exceptions
 import os
 
 #-----------------------Settings--------------------------
@@ -99,7 +100,10 @@ class AMZN:
     def page_parser(self, url):
         self.browser.get(url)
         self.page_data = {}
-        elem = self.browser.find_element_by_css_selector('#ppd')
+        try:
+            elem = self.browser.find_element_by_css_selector('#ppd')
+        except selenium.common.exceptions.NoSuchElementException:
+            elem = self.browser.find_element_by_css_selector('#dp-container')
 
         image = elem.find_element_by_id('leftCol')
         content = image.find_element_by_class_name('imgTagWrapper')
