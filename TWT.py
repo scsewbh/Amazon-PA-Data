@@ -1,12 +1,9 @@
 import mysql.connector
 from passwords import HOST, USER, PASSWORD, CK, CSK, AT, ATS
 import requests
-import json
 import time
 import tweepy
 import os
-from random import seed
-from random import randint
 
 #------------Twitter - Use Test Account-------------------
 # Twitter Bot
@@ -15,6 +12,7 @@ from random import randint
 # Follow Limit
 # 400 - New following per day
 # 300 - tweets or retweets every 3 hours <<<<IMPORTANT!!!!
+# 10800 seconds in 3 hours / 300 tweets = 1 tweet every 36 secs ~= 40secs for safety
 # 1000 - likes per day
 # 1000 - DMs sent per day
 # -------------------------------------
@@ -41,6 +39,7 @@ class TWT():
         self.api = tweepy.API(auth, wait_on_rate_limit='True', wait_on_rate_limit_notify='True')
         self.my_id = self.api.me().id
         self.url = ''
+        self.mycursor = mydb.cursor()
 
     def tweet(self, message):
         filename = 'img.jpg'
@@ -58,14 +57,27 @@ class TWT():
         message = 'name\nprice\nlink'
         self.api.update_status(message)
 
+    def DB_grab(self):
+        time.sleep()
+        self.mycursor.execute("USE mydatabase")
+        self.mycursor.execute(
+            "select p.ProductName, p.Link, i.Name, i.Price as I_Price, s.Price as S_Price, i.Img_URL, i.Price-s.Price "
+            "as P_Value from sync_data s, item_data i, products p where p.ProductName = i.ProductName and "
+            "p.ProductName = s.ProductName and i.Price-s.Price>0 limit 0,2")
+
+        myresult = self.mycursor.fetchall()
+
+        for row in myresult:
+            name = row[2]
+            price = str(row[4])
+            self.url = row[5]
+            link = row[1]
+            msg = name + '\n\nDeal Price: $' + price + '\n\n' + link
+            self.tweet(msg)
+
+
 x = TWT()
 x.test()
+#x.DB_grab()
 
-'''mycursor = mydb.cursor()
-mycursor.execute("USE mydatabase")
-mycursor.execute("SELECT * FROM item_data")
 
-myresult = mycursor.fetchall()
-
-for x in myresult:
-  print(x)'''
