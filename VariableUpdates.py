@@ -13,9 +13,9 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
 
 mydb = mysql.connector.connect(
-    host="35.231.149.95",
+    host="35.237.170.18",
     user="root",
-    password="Heroku3031",
+    password="Heroku3031*",
     database="mydatabase"
 )
 
