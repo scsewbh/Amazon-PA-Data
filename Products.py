@@ -45,8 +45,12 @@ amzn_HPC_url = 'https://www.amazon.com/most-wished-for/zgbs/hpc/'
 amzn_Skincare_url = 'https://www.amazon.com/most-wished-for/zgbs/beauty/11060451/'
 amzn_HI_url = 'https://www.amazon.com/most-wished-for/zgbs/hi/'
 amzn_Office_url = 'https://www.amazon.com/most-wished-for/zgbs/office-products'
+amzn_1 = 'https://www.amazon.com/Best-Sellers-Beauty-Skin-Care-Products/zgbs/beauty/11060451/'
+amzn_2 = 'https://www.amazon.com/gp/new-releases/electronics/'
+amzn_3 = 'https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics/'
 
-amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, amzn_PC_url, amzn_HPC_url, amzn_Skincare_url, amzn_HI_url, amzn_Office_url]
+
+amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, amzn_PC_url, amzn_HPC_url, amzn_Skincare_url, amzn_HI_url, amzn_Office_url, amzn_1, amzn_2, amzn_3]
 
 #-----------------------AMZN Class ----------------------------
 
@@ -199,4 +203,7 @@ instance.page_with_list(pages)
 #ONLY ONE SESSION OF SELENIUM AT A TIME
 
 instance = AMZN()
-instance.passToParser()
+instance.page_with_list(amzn_wishedFor)
+
+instance2 = AMZN()
+instance2.passToParser()
