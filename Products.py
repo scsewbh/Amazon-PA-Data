@@ -192,6 +192,5 @@ bestSellers = AMZN()
 '''
 pages = ['https://www.amazon.com/Best-Sellers-Amazon-Launchpad/zgbs/boost/', 'https://www.amazon.com/Best-Sellers-Beauty-Skin-Care-Products/zgbs/beauty/11060451/']
 instance = AMZN()
-instance.page_with_list(pages[0])
-instance.page_with_list(pages[1])
+instance.page_with_list(pages)
 instance.passToParser()
