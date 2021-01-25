@@ -63,7 +63,8 @@ class AMZN:
     #--------------------------------ADDING TO DB---------------------------------
     def passToDatabase(self):
         mycursor = mydb.cursor()
-        sql = "INSERT IGNORE INTO products (ProductName, Link) VALUES (%s, %s)" #Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
+        sql = "INSERT IGNORE INTO products (ProductName, Link) VALUES (%s, %s)"
+        #Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
         mycursor.executemany(sql, self.data)
         mydb.commit()
         print(mycursor.rowcount, "was inserted to table.")
@@ -141,6 +142,7 @@ class AMZN:
         for elem in self.page_data:
             print(elem, self.page_data[elem])
         '''
+
     #INITIAL PASS SETUP
     def dataOrganizer(self):
         self.item_dataHolder = ()
@@ -194,6 +196,7 @@ pages = ['https://www.amazon.com/Best-Sellers-Amazon-Launchpad/zgbs/boost/', 'ht
 
 instance.page_with_list(pages)
 '''
+#ONLY ONE SESSION OF SELENIUM AT A TIME
 
 instance = AMZN()
 instance.passToParser()

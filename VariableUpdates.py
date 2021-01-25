@@ -1,6 +1,7 @@
 import mysql.connector
 from selenium import webdriver
 import os
+import selenium.common.exceptions
 
 #CONSTANTLY CHANGING VARIABLE - UPDATING
 #-----------------------Settings--------------------------
@@ -40,9 +41,16 @@ class AMZN:
     def page_parser(self, url):
         self.browser.get(url)
         self.data = ()
-        elem = self.browser.find_element_by_css_selector('#ppd')
-        main = elem.find_element_by_id('centerCol').text
 
+        try:
+            elem = self.browser.find_element_by_css_selector('#ppd')
+        except selenium.common.exceptions.NoSuchElementException:
+            try:
+                elem = self.browser.find_element_by_css_selector('#dp-container')
+            except selenium.common.exceptions.NoSuchElementException:
+                return
+
+        main = elem.find_element_by_id('centerCol').text
         splitted = main.splitlines()
         temp = 0
         for line in splitted:
