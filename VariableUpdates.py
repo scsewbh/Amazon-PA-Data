@@ -2,6 +2,7 @@ import mysql.connector
 from selenium import webdriver
 import os
 import selenium.common.exceptions
+import time
 
 #CONSTANTLY CHANGING VARIABLE - UPDATING
 #-----------------------Settings--------------------------
@@ -77,4 +78,5 @@ class AMZN:
 
 instance = AMZN()
 while True:
+    time.sleep(900)
     instance.passToParser()
