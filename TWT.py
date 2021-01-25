@@ -61,7 +61,7 @@ class TWT():
         self.mycursor.execute(
             "select p.ProductName, p.Link, i.Name, i.Price as I_Price, s.Price as S_Price, i.Img_URL, i.Price-s.Price "
             "as P_Value from sync_data s, item_data i, products p where p.ProductName = i.ProductName and "
-            "p.ProductName = s.ProductName and i.Price-s.Price>0 limit 0,2")
+            "p.ProductName = s.ProductName and i.Price-s.Price>0")
 
         myresult = self.mycursor.fetchall()
 
