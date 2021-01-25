@@ -28,7 +28,6 @@ class AMZN:
     def __init__(self):
         self.browser = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
         self.data = ()
-        self.passToParser()
 
     def passToParser(self):
         mycursor = mydb.cursor()
@@ -52,10 +51,13 @@ class AMZN:
             if 'Price: $' in line:
                 temp += 1
                 if temp == 1:
-                    self.data += ((line.split('$')[-1]).split(' ')[0],)
+                    self.data += ((line.split('$')[1]).split(' ')[0],)
                 if temp == 2:
                     self.data = ()
-                    self.data += ((line.split('$')[-1]).split(' ')[0],)
+                    self.data += ((line.split('$')[1]).split(' ')[0],)
+            if 'With Deal: $' in line:
+                self.data = ()
+                self.data += ((line.split('$')[1]).split(' ')[0],)
         self.data += (url.replace(amzn_base_url, ''),)
         self.updateDatabase()
 
@@ -67,4 +69,6 @@ class AMZN:
         mydb.commit()
         print(mycursor.rowcount, "updated in table.")
 
-AMZN()
+instance = AMZN()
+while True:
+    instance.passToParser()

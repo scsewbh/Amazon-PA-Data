@@ -61,6 +61,7 @@ class AMZN:
         self.item_data_names = ['name', 'price', 'img_url', 'product_id']
         self.sync_data_names = ['product_id', 'discounted_price']
 
+    #--------------------------------ADDING TO DB---------------------------------
     def passToDatabase(self):
         mycursor = mydb.cursor()
         sql = "INSERT IGNORE INTO products (ProductName, Link) VALUES (%s, %s)" #Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
@@ -88,6 +89,7 @@ class AMZN:
             self.results(url)
         self.browser.quit()
 
+    #------------------------------PARSING----------------------------------------
     def passToParser(self):
         mycursor = mydb.cursor()
         mycursor.execute("SELECT Link FROM products") #LIMIT AT 3 FOR TESTING - PARTITION OUT FOR HEROKU SOMEHOW
@@ -126,6 +128,7 @@ class AMZN:
                 if temp == 2:
                     self.page_data['discounted_price'] = (line.split('$')[-1]).split(' ')[0]
             if 'Was: $' in line:
+                temp += 1
                 self.page_data['price'] = (line.split('$')[-1]).split(' ')[0]
             if 'With Deal: $' in line:
                 self.page_data['discounted_price'] = (line.split('$')[-1]).split(' ')[0]
@@ -188,7 +191,8 @@ for x in amzn_bestSellers:
 g = 'https://www.amazon.com//Canon-PG-243-Cartridge-Compatible-iP2820/dp/B01LXJNPZV?_encoding=UTF8&psc=1'
 bestSellers = AMZN()
 '''
-
-y = AMZN()
-y.passToParser()
-
+pages = ['https://www.amazon.com/Best-Sellers-Amazon-Launchpad/zgbs/boost/', 'https://www.amazon.com/Best-Sellers-Beauty-Skin-Care-Products/zgbs/beauty/11060451/']
+instance = AMZN()
+instance.page_with_list(pages[0])
+instance.page_with_list(pages[1])
+instance.passToParser()

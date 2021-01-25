@@ -58,7 +58,6 @@ class TWT():
         self.api.update_status(message)
 
     def DB_grab(self):
-        time.sleep()
         self.mycursor.execute("USE mydatabase")
         self.mycursor.execute(
             "select p.ProductName, p.Link, i.Name, i.Price as I_Price, s.Price as S_Price, i.Img_URL, i.Price-s.Price "
@@ -68,16 +67,19 @@ class TWT():
         myresult = self.mycursor.fetchall()
 
         for row in myresult:
+            time.sleep(40) # TO FOLLOW TWITTER RATE LIMIT 36 sec min.
             name = row[2]
             price = str(row[4])
+            d_price = str(row[3])
             self.url = row[5]
             link = row[1]
-            msg = name + '\n\nDeal Price: $' + price + '\n\n' + link
+            msg = name + '\n\nPrice: $' + d_price + '\nDeal Price: $' + price + '\n\n' + link
             self.tweet(msg)
 
 
-x = TWT()
-x.test()
-#x.DB_grab()
+instance = TWT()
+while True:
+    instance.DB_grab()
+
 
 
