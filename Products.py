@@ -189,8 +189,11 @@ for x in amzn_bestSellers:
     print(mycursor.rowcount, "was inserted.")
 g = 'https://www.amazon.com//Canon-PG-243-Cartridge-Compatible-iP2820/dp/B01LXJNPZV?_encoding=UTF8&psc=1'
 bestSellers = AMZN()
-'''
+
 pages = ['https://www.amazon.com/Best-Sellers-Amazon-Launchpad/zgbs/boost/', 'https://www.amazon.com/Best-Sellers-Beauty-Skin-Care-Products/zgbs/beauty/11060451/']
-instance = AMZN()
+
 instance.page_with_list(pages)
+'''
+
+instance = AMZN()
 instance.passToParser()
