@@ -1,5 +1,4 @@
 import mysql.connector
-from passwords import HOST, USER, PASSWORD, CK, CSK, AT, ATS
 import requests
 import time
 import tweepy
@@ -18,18 +17,18 @@ import os
 # -------------------------------------
 
 mydb = mysql.connector.connect(
-    host=HOST,
-    user=USER,
-    password=PASSWORD,
+    host=os.environ.get("HOST"),
+    user=os.environ.get("USER"),
+    password=os.environ.get("PASSWORD"),
     database="mydatabase"
 )
 
 # Destroyer Account
 
-consumer_key = CK
-consumer_secret_key = CSK
-access_token = AT
-access_token_secret = ATS
+consumer_key = os.environ.get("CK")
+consumer_secret_key = os.environ.get("CSK")
+access_token = os.environ.get("AT")
+access_token_secret = os.environ.get("ATS")
 
 
 class TWT():

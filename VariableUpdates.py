@@ -1,8 +1,6 @@
-from bs4 import BeautifulSoup as bs
 import mysql.connector
 from selenium import webdriver
 import os
-from passwords import HOST, USER, PASSWORD
 
 #CONSTANTLY CHANGING VARIABLE - UPDATING
 #-----------------------Settings--------------------------
@@ -14,9 +12,9 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
 
 mydb = mysql.connector.connect(
-    host=HOST,
-    user=USER,
-    password=PASSWORD,
+    host=os.environ.get("HOST"),
+    user=os.environ.get("USER"),
+    password=os.environ.get("PASSWORD"),
     database="mydatabase"
 )
 
