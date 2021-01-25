@@ -71,6 +71,8 @@ class AMZN:
     def updateDatabase(self):
         #------Passing--------
         mycursor = mydb.cursor()
+        if len(self.data) != 2:
+            self.data = ('0.00', self.data[0])
         sql = "UPDATE sync_data SET Price = %s WHERE ProductName = %s"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
         mycursor.execute(sql, self.data)  # data is reversed price first then product name
         mydb.commit()
