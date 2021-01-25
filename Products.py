@@ -114,12 +114,15 @@ class AMZN:
             except selenium.common.exceptions.NoSuchElementException:
                 return
 
-        image = elem.find_element_by_id('leftCol')
-        content = image.find_element_by_class_name('imgTagWrapper')
-        con = content.find_element_by_tag_name('img')
-        img_src = con.get_attribute('src')
-        main = elem.find_element_by_id('centerCol').text
+        try:
+            image = elem.find_element_by_id('leftCol')
+            content = image.find_element_by_class_name('imgTagWrapper')
+            con = content.find_element_by_tag_name('img')
+            img_src = con.get_attribute('src')
+        except selenium.common.exceptions.NoSuchElementException:
+            img_src = 'No Image'
 
+        main = elem.find_element_by_id('centerCol').text
         splitted = main.splitlines()
         product_name = splitted[0]
         self.page_data['name'] = product_name
