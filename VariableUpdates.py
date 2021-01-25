@@ -78,7 +78,7 @@ class AMZN:
         mydb.commit()
         print(mycursor.rowcount, "updated in table.")
 
-instance = AMZN()
 while True:
-    time.sleep(900)
+    instance = AMZN()
     instance.passToParser()
+    time.sleep(900)
