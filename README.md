@@ -12,9 +12,9 @@ You can view the Twitter Account here: https://twitter.com/CulturedDeals
 
 Next Steps:
 
-[ ] Priority Queue based on Ratings Given
-[ ] Shuffled Order (Easy Change)
-[ ] System to Mention User's for Specific Item's Price Change
++ [ ]  Priority Queue based on Ratings Given
++ [ ]  Shuffled Order (Easy Change)
++ [ ]  System to Mention User's for Specific Item's Price Change
 
 Screenshot:
 
