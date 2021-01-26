@@ -58,10 +58,10 @@ class TWT():
 
     def DB_grab(self):
         self.mycursor.execute("USE mydatabase")
-        self.mycursor.execute(
-            "select p.ProductName, p.Link, i.Name, i.Price as I_Price, s.Price as S_Price, i.Img_URL, i.Price-s.Price "
-            "as P_Value from sync_data s, item_data i, products p where p.ProductName = i.ProductName and "
-            "p.ProductName = s.ProductName and i.Price-s.Price>0")
+        self.mycursor.execute("select p.ProductName, p.Link, i.Name, i.Price as I_Price, s.Price as S_Price, "
+                              "i.Img_URL, i.Price-s.Price as P_Value from sync_data s, item_data i, products p where "
+                              "p.ProductName = i.ProductName and p.ProductName = s.ProductName and (("
+                              "i.Price-s.Price)/i.Price*100)>=10 and i.Price-s.Price>0 order by i.Price-s.Price desc")
 
         myresult = self.mycursor.fetchall()
 
