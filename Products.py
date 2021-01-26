@@ -125,6 +125,7 @@ class AMZN:
         main = elem.find_element_by_id('centerCol').text
         splitted = main.splitlines()
         product_name = elem.find_element_by_id('productTitle').text
+        print(product_name)
         self.page_data['name'] = product_name
         temp = 0
         for line in splitted:
@@ -140,7 +141,7 @@ class AMZN:
             if 'With Deal: $' in line:
                 self.page_data['discounted_price'] = (line.split('$')[1]).split(' ')[0]
             if 'price' not in self.page_data:
-                return
+                self.page_data['price'] = 'Not Listed'
         self.page_data['img_url'] = img_src
         self.page_data['product_id'] = url.replace(amzn_base_url, '')
         self.dataOrganizer()
@@ -173,14 +174,14 @@ class AMZN:
         # sync_data (ProductName VARCHAR(255), Price DECIMAL(5,2), Savings TINYINT, PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))")
 
         mycursor = mydb.cursor()
-        sql = "INSERT INTO item_data (Name, Price, Img_URL, ProductName) VALUES (%s, %s, %s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
+        sql = "INSERT IGNORE INTO item_data (Name, Price, Img_URL, ProductName) VALUES (%s, %s, %s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
         mycursor.execute(sql, self.item_dataHolder)
         mydb.commit()
 
         #---------------------------------------------------------
 
         mycursor = mydb.cursor()
-        sql = "INSERT INTO sync_data (ProductName, Price) VALUES (%s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
+        sql = "INSERT IGNORE INTO sync_data (ProductName, Price) VALUES (%s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
         mycursor.execute(sql, self.sync_dataHolder)
         mydb.commit()
 
