@@ -118,7 +118,7 @@ class AMZN:
             image = elem.find_element_by_id('leftCol')
             content = image.find_element_by_class_name('imgTagWrapper')
             con = content.find_element_by_tag_name('img')
-            img_src = con.get_attribute('src')
+            img_src = con.get_attribute('data-old-hires')
         except selenium.common.exceptions.NoSuchElementException:
             img_src = 'No Image'
 
