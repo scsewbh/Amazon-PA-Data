@@ -31,7 +31,7 @@ class AMZN:
 
     def passToParser(self):
         mycursor = mydb.cursor()
-        mycursor.execute("SELECT Link FROM products") #LIMIT AT 3 FOR TESTING - PARTITION OUT FOR HEROKU SOMEHOW ----> #NOT NEEDED FOR NOW
+        mycursor.execute("SELECT p.Link FROM products p, item_data i where p.ProductName=i.ProductName") #LIMIT AT 3 FOR TESTING - PARTITION OUT FOR HEROKU SOMEHOW ----> #NOT NEEDED FOR NOW
         myresult = mycursor.fetchall()
         print(myresult)
         for url in myresult:

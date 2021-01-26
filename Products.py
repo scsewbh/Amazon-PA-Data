@@ -120,27 +120,27 @@ class AMZN:
             con = content.find_element_by_tag_name('img')
             img_src = con.get_attribute('data-old-hires')
         except selenium.common.exceptions.NoSuchElementException:
-            img_src = 'No Image'
+            return
 
         main = elem.find_element_by_id('centerCol').text
         splitted = main.splitlines()
-        product_name = splitted[0]
+        product_name = elem.find_element_by_id('productTitle').text
         self.page_data['name'] = product_name
         temp = 0
         for line in splitted:
             if 'Price: $' in line:
                 temp += 1
                 if temp == 1:
-                    self.page_data['price'] = (line.split('$')[-1]).split(' ')[0]
+                    self.page_data['price'] = (line.split('$')[1]).split(' ')[0]
                 if temp == 2:
-                    self.page_data['discounted_price'] = (line.split('$')[-1]).split(' ')[0]
+                    self.page_data['discounted_price'] = (line.split('$')[1]).split(' ')[0]
             if 'Was: $' in line:
                 temp += 1
-                self.page_data['price'] = (line.split('$')[-1]).split(' ')[0]
+                self.page_data['price'] = (line.split('$')[1]).split(' ')[0]
             if 'With Deal: $' in line:
-                self.page_data['discounted_price'] = (line.split('$')[-1]).split(' ')[0]
+                self.page_data['discounted_price'] = (line.split('$')[1]).split(' ')[0]
             if 'price' not in self.page_data:
-                self.page_data['price'] = 'Not Listed'
+                return
         self.page_data['img_url'] = img_src
         self.page_data['product_id'] = url.replace(amzn_base_url, '')
         self.dataOrganizer()
