@@ -172,18 +172,18 @@ class AMZN:
     def passProductsToDBs(self):
         # item_data (Name TEXT, Price DECIMAL(5,2), Img_URL TEXT, ProductName VARCHAR(255), PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))")
         # sync_data (ProductName VARCHAR(255), Price DECIMAL(5,2), Savings TINYINT, PRIMARY KEY (ProductName), FOREIGN KEY (ProductName) REFERENCES products(ProductName))")
+        if self.page_data['price'] != 'Not Listed':
+            mycursor = mydb.cursor()
+            sql = "INSERT IGNORE INTO item_data (Name, Price, Img_URL, ProductName) VALUES (%s, %s, %s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
+            mycursor.execute(sql, self.item_dataHolder)
+            mydb.commit()
 
-        mycursor = mydb.cursor()
-        sql = "INSERT IGNORE INTO item_data (Name, Price, Img_URL, ProductName) VALUES (%s, %s, %s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
-        mycursor.execute(sql, self.item_dataHolder)
-        mydb.commit()
+            #---------------------------------------------------------
 
-        #---------------------------------------------------------
-
-        mycursor = mydb.cursor()
-        sql = "INSERT IGNORE INTO sync_data (ProductName, Price) VALUES (%s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
-        mycursor.execute(sql, self.sync_dataHolder)
-        mydb.commit()
+            mycursor = mydb.cursor()
+            sql = "INSERT IGNORE INTO sync_data (ProductName, Price) VALUES (%s, %s)"  # Insert Ignore allows me to insert products and skip over the duplicates and the error it gives.
+            mycursor.execute(sql, self.sync_dataHolder)
+            mydb.commit()
 
 
 
