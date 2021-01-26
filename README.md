@@ -18,4 +18,4 @@ Next Steps:
 
 Screenshot:
 
-
+![Alt text](Screenshots/Twitter-CD.PNG "Twitter Screenshot")
