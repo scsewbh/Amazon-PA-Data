@@ -205,8 +205,8 @@ instance.page_with_list(pages)
 '''
 #ONLY ONE SESSION OF SELENIUM AT A TIME
 
-instance = AMZN()
-instance.page_with_list(amzn_wishedFor)
+'''instance = AMZN()
+instance.page_with_list(amzn_wishedFor)'''
 
 instance2 = AMZN()
 instance2.passToParser()
