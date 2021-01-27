@@ -62,7 +62,7 @@ class TWT():
                               "i.Img_URL, i.Price-s.Price as P_Value from sync_data s, item_data i, products p where "
                               "p.ProductName = i.ProductName and p.ProductName = s.ProductName and (("
                               "i.Price-s.Price)/i.Price*100)>=10 and i.Price-s.Price>0 and i.Price>0 and s.Price>0 "
-                              "order by i.Price-s.Price desc")
+                              "and Img_URL!='' order by i.Price-s.Price desc")
 
         myresult = self.mycursor.fetchall()
 
