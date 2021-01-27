@@ -67,7 +67,7 @@ class TWT():
         myresult = self.mycursor.fetchall()
 
         for row in myresult:
-            time.sleep(40) # TO FOLLOW TWITTER RATE LIMIT 36 sec min.
+            time.sleep(55) # TO FOLLOW TWITTER RATE LIMIT 36 sec min.
             name = row[2]
             price = str(row[4])
             d_price = str(row[3])
