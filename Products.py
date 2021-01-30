@@ -37,6 +37,7 @@ for x in myresult:
 #------------------------Initial Variables--------------------------------
 
 amzn_base_url = 'https://www.amazon.com/'
+
 amzn_Elec_url = 'https://www.amazon.com/most-wished-for/zgbs/electronics/'
 amzn_VideoGame_url = 'https://www.amazon.com/most-wished-for/zgbs/videogames/'
 amzn_CellAccessories_url = 'https://www.amazon.com/most-wished-for/zgbs/wireless/'
@@ -45,12 +46,21 @@ amzn_HPC_url = 'https://www.amazon.com/most-wished-for/zgbs/hpc/'
 amzn_Skincare_url = 'https://www.amazon.com/most-wished-for/zgbs/beauty/11060451/'
 amzn_HI_url = 'https://www.amazon.com/most-wished-for/zgbs/hi/'
 amzn_Office_url = 'https://www.amazon.com/most-wished-for/zgbs/office-products'
+
 amzn_1 = 'https://www.amazon.com/Best-Sellers-Beauty-Skin-Care-Products/zgbs/beauty/11060451/'
-amzn_2 = 'https://www.amazon.com/gp/new-releases/electronics/'
 amzn_3 = 'https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics/'
+a4 = 'https://www.amazon.com/Best-Sellers-Home-Kitchen-Bedding/zgbs/home-garden/1063252/'
+a5 = 'https://www.amazon.com/Best-Sellers-Home-Kitchen-Vacuum-Cleaners-Floor-Care/zgbs/home-garden/510106/'
+a6 = 'https://www.amazon.com/Best-Sellers-Home-Kitchen/zgbs/home-garden/'
+a7 = 'https://www.amazon.com/Best-Sellers-Industrial-Scientific/zgbs/industrial/'
+a8 = 'https://www.amazon.com/Best-Sellers-Home-Improvement-Electrical-Equipment/zgbs/hi/495266/'
 
 
-amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, amzn_PC_url, amzn_HPC_url, amzn_Skincare_url, amzn_HI_url, amzn_Office_url, amzn_1, amzn_2, amzn_3]
+amzn_2 = 'https://www.amazon.com/gp/new-releases/electronics/'
+
+
+
+amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, amzn_PC_url, amzn_HPC_url, amzn_Skincare_url, amzn_HI_url, amzn_Office_url, amzn_1, amzn_2, amzn_3, a4, a5, a6, a7 , a8]
 
 #-----------------------AMZN Class ----------------------------
 
@@ -206,8 +216,8 @@ instance.page_with_list(pages)
 '''
 #ONLY ONE SESSION OF SELENIUM AT A TIME
 
-'''instance = AMZN()
-instance.page_with_list(amzn_wishedFor)'''
+instance = AMZN()
+instance.page_with_list(amzn_wishedFor) #Will Take A List of Amazon Lists' of Products and add to DB
 
 instance2 = AMZN()
-instance2.passToParser()
+instance2.passToParser() #Will Add or Update Data Tables in DB
