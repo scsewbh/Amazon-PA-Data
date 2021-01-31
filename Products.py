@@ -36,7 +36,7 @@ for x in myresult:
 
 #------------------------Initial Variables--------------------------------
 
-amzn_basep_url = 'https://www.amazon.com/dp'
+amzn_basep_url = 'https://www.amazon.com/dp/'
 
 amzn_Elec_url = 'https://www.amazon.com/most-wished-for/zgbs/electronics/'
 amzn_VideoGame_url = 'https://www.amazon.com/most-wished-for/zgbs/videogames/'
