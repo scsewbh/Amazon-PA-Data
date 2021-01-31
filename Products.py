@@ -36,7 +36,7 @@ for x in myresult:
 
 #------------------------Initial Variables--------------------------------
 
-amzn_base_url = 'https://www.amazon.com/'
+amzn_basep_url = 'https://www.amazon.com/dp'
 
 amzn_Elec_url = 'https://www.amazon.com/most-wished-for/zgbs/electronics/'
 amzn_VideoGame_url = 'https://www.amazon.com/most-wished-for/zgbs/videogames/'
@@ -44,7 +44,7 @@ amzn_CellAccessories_url = 'https://www.amazon.com/most-wished-for/zgbs/wireless
 amzn_PC_url = 'https://www.amazon.com/most-wished-for/zgbs/pc/'
 amzn_HPC_url = 'https://www.amazon.com/most-wished-for/zgbs/hpc/'
 amzn_Skincare_url = 'https://www.amazon.com/most-wished-for/zgbs/beauty/11060451/'
-amzn_HI_url = 'https://www.amazon.com/most-wished-for/zgbs/hi/'
+amzn_HI_url = 'https://www.amazon.com/Best-Sellers-Home-Improvement-Lighting-Ceiling-Fans/zgbs/hi/495224/'
 amzn_Office_url = 'https://www.amazon.com/most-wished-for/zgbs/office-products'
 
 amzn_1 = 'https://www.amazon.com/Best-Sellers-Beauty-Skin-Care-Products/zgbs/beauty/11060451/'
@@ -94,7 +94,8 @@ class AMZN:
             pHref = parLink['href'].split('?_encoding=')[0]
             if '/ref=' in pHref:
                 pHref = pHref.split('/ref=')[0]
-            self.data.append((pHref, amzn_base_url + pHref))
+            pHref = pHref.split('/dp/')[1]
+            self.data.append((pHref, amzn_basep_url + pHref))
         self.passToDatabase()
 
     def page_with_list(self, page_urls):
@@ -153,7 +154,7 @@ class AMZN:
             if 'price' not in self.page_data:
                 self.page_data['price'] = 'Not Listed'
         self.page_data['img_url'] = img_src
-        self.page_data['product_id'] = url.replace(amzn_base_url, '')
+        self.page_data['product_id'] = url.replace(amzn_basep_url, '')
         self.dataOrganizer()
         self.passProductsToDBs()
         '''
