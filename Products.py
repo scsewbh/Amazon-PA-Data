@@ -102,7 +102,6 @@ class AMZN:
         #Takes the array of pages that are list eg: bestsellers, new releases
         for url in page_urls:
             self.results(url)
-        self.browser.quit()
 
     #------------------------------PARSING----------------------------------------
     def passToParser(self):
@@ -219,6 +218,4 @@ instance.page_with_list(pages)
 
 instance = AMZN()
 instance.page_with_list(amzn_wishedFor) #Will Take A List of Amazon Lists' of Products and add to DB
-
-instance2 = AMZN()
-instance2.passToParser() #Will Add or Update Data Tables in DB
+instance.passToParser() #Will Add or Update Data Tables in DB
