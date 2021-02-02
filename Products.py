@@ -48,6 +48,7 @@ amzn_HI_url = 'https://www.amazon.com/Best-Sellers-Home-Improvement-Lighting-Cei
 amzn_Office_url = 'https://www.amazon.com/most-wished-for/zgbs/office-products'
 
 amzn_1 = 'https://www.amazon.com/Best-Sellers-Beauty-Skin-Care-Products/zgbs/beauty/11060451/'
+a2 = 'https://www.amazon.com/Best-Sellers-Computers-Accessories-Computer-Monitors/zgbs/pc/1292115011/'
 amzn_3 = 'https://www.amazon.com/Best-Sellers-Electronics/zgbs/electronics/'
 a4 = 'https://www.amazon.com/Best-Sellers-Home-Kitchen-Bedding/zgbs/home-garden/1063252/'
 a5 = 'https://www.amazon.com/Best-Sellers-Home-Kitchen-Vacuum-Cleaners-Floor-Care/zgbs/home-garden/510106/'
@@ -57,10 +58,10 @@ a8 = 'https://www.amazon.com/Best-Sellers-Home-Improvement-Electrical-Equipment/
 
 
 amzn_2 = 'https://www.amazon.com/gp/new-releases/electronics/'
+a9 = 'https://www.amazon.com/Best-Sellers-Electronics-Computer-Printers/zgbs/electronics/172635/'
+a10 = 'https://www.amazon.com/Best-Sellers-Electronics-Televisions/zgbs/electronics/172659/'
 
-
-
-amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, amzn_PC_url, amzn_HPC_url, amzn_Skincare_url, amzn_HI_url, amzn_Office_url, amzn_1, amzn_2, amzn_3, a4, a5, a6, a7 , a8]
+amzn_wishedFor = [amzn_Elec_url, amzn_VideoGame_url, amzn_CellAccessories_url, amzn_PC_url, amzn_HPC_url, amzn_Skincare_url, amzn_HI_url, amzn_Office_url, amzn_1, amzn_2, amzn_3, a4, a5, a6, a7 , a8, a2, a9, a10]
 
 #-----------------------AMZN Class ----------------------------
 
