@@ -8,7 +8,7 @@ The bot was made for public use. The bot's main feature is tweet some of the bes
 
 **ACCOUNT SUSPENDED**
 Bug in code that reposted the same deal multiple times in a row resulted in Twitter suspending account for breaking spam policy. Will be working new account and updating code to deal with this issue along with many more updates and rules. 
-You can view the Twitter Account here: https://twitter.com/CulturedDeals
+The Suspended Account Page: https://twitter.com/CulturedDeals
 
 Next Steps:
 
